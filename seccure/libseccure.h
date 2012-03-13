@@ -1,19 +1,19 @@
 /*
  *  libseccure - Copyright 2009 Slide, Inc.
  *
- * This library is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU Lesser General Public License 
- * as published by the Free Software Foundation; either version 2.1 of 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License 
- * for more details. 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License 
- * along with this library; if not, write to the 
- * Free Software Foundation, Inc., 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the
+ * Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
@@ -32,9 +32,9 @@
 /**
  * Default curve to use when encrypting, etc
  */
-#define DEFAULT_CURVE "p384"
+#define DEFAULT_CURVE "p521"
 
-#define DEFAULT_MAC_LEN 10
+#define DEFAULT_MAC_LEN 32
 
 /**
  * ::ECC_KeyPair denotes a structure to hold the public/private
@@ -63,7 +63,7 @@ typedef struct _ECC_Data* ECC_Data;
 struct _ECC_Options {
 	char *curve; /*!< curve will be defaulted to ::DEFAULT_CURVE by ecc_new_options() */
 	bool secure_random; /*!< secure_random enables libgcrypt's secure random number generator, default true */
-}; 
+};
 typedef struct _ECC_Options* ECC_Options;
 
 /**
@@ -78,21 +78,21 @@ typedef struct _ECC_State* ECC_State;
 
 
 /**
- * Allocate an empty ::ECC_KeyPair 
+ * Allocate an empty ::ECC_KeyPair
  *
- * The privkey and pubkey arguments will be converted into an internal ::gcry_mpi_t 
+ * The privkey and pubkey arguments will be converted into an internal ::gcry_mpi_t
  * representation along the way, calling strlen() on both of them.
  *
- * If you do not want strlen() to be called, use ecc_new_keypair_s() and 
+ * If you do not want strlen() to be called, use ecc_new_keypair_s() and
  * specify a custom length for the respective keys
  */
 ECC_KeyPair ecc_new_keypair(char *pubkey, char *privkey, ECC_State state);
 
 /**
  * Allocate an empty ::ECC_KeyPair but allow the specification of the lengths
- * of the respective keys 
+ * of the respective keys
  */
-ECC_KeyPair ecc_new_keypair_s(char *pubkey, unsigned int pubkeylen, char *privkey, 
+ECC_KeyPair ecc_new_keypair_s(char *pubkey, unsigned int pubkeylen, char *privkey,
 	unsigned int privkeylen, ECC_State state);
 /**
  * Free and release an ::ECC_KeyPair
@@ -130,7 +130,7 @@ void ecc_free_state(ECC_State state);
  * it's own private key via some other source of entropy and then return
  * the allocated key in the ::ECC_KeyPair
  *
- * @return ECC_KeyPair 
+ * @return ECC_KeyPair
  * @param priv Specify NULL to generate a random private key, otherwise string.
  * You will be responsible for deallocating "priv" yourself, if not-NULL then
  * the contents of the buffer will be copied into a new buffer
@@ -155,7 +155,7 @@ char *ecc_serialize_private_key(ECC_KeyPair kp, ECC_State state);
 /**
  * Encrypt the specified block of data using the public key specified
  *
- * @return An allocated buffer with the encrypted data 
+ * @return An allocated buffer with the encrypted data
  */
 ECC_Data ecc_encrypt(void *data, int databytes, ECC_KeyPair keypair, ECC_State state);
 
@@ -173,7 +173,7 @@ ECC_Data ecc_decrypt(ECC_Data encrypted, ECC_KeyPair keypair, ECC_State state);
  *
  * @return An allocated buffer with the signature of the data block
  * @param data An allocated buffer to generate a signature against
- * @param keypair ::ECC_KeyPair to use when generating the signature 
+ * @param keypair ::ECC_KeyPair to use when generating the signature
  * (only needs "priv" member to contain data)
  * @param state ::ECC_State object
  */
@@ -185,7 +185,7 @@ ECC_Data ecc_sign(char *data, ECC_KeyPair keypair, ECC_State state);
  *
  * @return True/False
  * @param data An allocated buffer against which to verify the signature
- * @param signature The ECC generated signature 
+ * @param signature The ECC generated signature
  * @param keypair ::ECC_KeyPair object (only needs the "pub" member to contain data)
  * @param state ::ECC_State object
  */
